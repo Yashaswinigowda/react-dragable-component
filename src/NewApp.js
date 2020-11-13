@@ -31,10 +31,24 @@ const handleDragStart = (e, position) => {
   console.log("handle drag start ", e.target.innerHTML, position);
 };
 
+// const handleDragEnter = (e, position) => {
+//   dragOverItem.current = position;
+//   console.log(e.target.innerHTML, position);
+//  };
+
 const handleDragEnter = (e, position) => {
   dragOverItem.current = position;
-  console.log(e.target.innerHTML, position);
- };
+  console.log(e.target.innerHTML);
+  const listCopy = [...list];
+  console.log(draggingItem.current, dragOverItem.current);
+  const draggingItemContent = listCopy[draggingItem.current];
+  listCopy.splice(draggingItem.current, 1);
+  listCopy.splice(dragOverItem.current, 0, draggingItemContent);
+
+  draggingItem.current = dragOverItem.current;
+  dragOverItem.current = null;
+  setList(listCopy);
+};
 
  const handleDragEnd = (e) => {
   const listCopy = [...list];
@@ -45,28 +59,26 @@ const handleDragEnter = (e, position) => {
    draggingItem.current = null;
    dragOverItem.current = null;
    setList(listCopy);
-};
+  };
 
 // All dishes above. Indian
 return (
 <>
-<div className="droppable"
-   onDragOver={(e) => e.preventDefault()}
-   onDrop={handleDragEnd}
-  //  onDragEnd={handleDragEnd}
->
 {
  list &&
   list.map((item, index) => (
      <h1 key={index} 
-     className="draggable"
      onDragStart={(e) => handleDragStart(e, index)}
      onDragEnter={(e) => handleDragEnter(e, index)}
+     onDragOver={(e) => e.preventDefault()}
+    //  onDragEnd={handleDragEnd}
+     onDragOver={(e) => e.preventDefault()}
      draggable>
        {item}
      </h1>
     ))}
-  </div>
+
+    <ToDoDragDropDemo />
    </>
   );
 };
